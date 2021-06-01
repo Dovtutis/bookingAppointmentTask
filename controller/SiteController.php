@@ -1,0 +1,29 @@
+<?php
+
+
+namespace app\controller;
+
+use app\core\Application;
+use app\core\Controller;
+use app\core\Request;
+
+class SiteController extends Controller
+{
+    /**
+     * This handles Home Page GET request
+     * @return string|string[]
+     */
+    public function index()
+    {
+        $params = [
+            'name' => "Doctor Appointment Booking",
+            'currentPage' => "home"
+        ];
+        return $this->render('index', $params);
+    }
+
+    public function notFound()
+    {
+        return $this->render('_404');
+    }
+}
