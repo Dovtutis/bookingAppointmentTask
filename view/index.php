@@ -22,6 +22,7 @@
                         <div class="form-group">
                             <label for="day">Select available day:</label>
                             <input type="date" id="day" name="day"> 
+                            <span class="invalid-feedback"></span>
                         </div>
                         <div class="form-group" id="hour-selector">
                             <label for="time">Select available time:</label>
@@ -32,6 +33,9 @@
                                 <option value="11">11:00</option>
                             </select> 
                         </div>
+                        <button type="submit" class="submit-button">
+                            Book an appointment
+                        </button>
                     </div>
                 </div>
             </form>
@@ -46,5 +50,53 @@
 
 
 <script>
+    const appointmentFormEl = document.getElementById('appointment-form');
+    const nameInputEl = document.getElementById('name');
+    const lastnameInputEl = document.getElementById('lastname');
+    const dayInputEl = document.getElementById('day');
 
+    appointmentFormEl.addEventListener('submit', addAnAppointment);
+
+    function addAnAppointment(event) {
+        event.preventDefault();
+        resetErrors();
+
+        const formData = new FormData(appointmentFormEl);
+
+        fetch('/', {
+            method: 'post',
+            body: formData
+        }).then(resp => resp.json())
+            .then(data => {
+                console.log(data)
+                if (data.errors){
+                    handleErrors(data.errors);
+                }
+            }).catch(error => console.error())
+    }
+
+    function handleErrors(errors) {
+
+        if (errors['nameError'] !== "") {
+            nameInputEl.classList.add('is-invalid');
+            nameInputEl.nextElementSibling.innerHTML = errors['nameError'];
+        }
+
+        if (errors['lastnameError'] !== "") {
+            lastnameInputEl.classList.add('is-invalid');
+            lastnameInputEl.nextElementSibling.innerHTML = errors['lastnameError'];
+        }
+
+        if (errors['dayError'] !== "") {
+            dayInputEl.classList.add('is-invalid');
+            dayInputEl.nextElementSibling.innerHTML = errors['dayError'];
+        }
+    }
+
+    function resetErrors(){
+        const errorEl = appointmentFormEl.querySelectorAll('.is-invalid');
+        errorEl.forEach((element) => {
+            element.classList.remove('is-invalid');
+        });
+    }
 </script>

@@ -20,5 +20,6 @@ $config = [
 $app = new Application(dirname(__DIR__), $config);
 
 $app->router->get('/', [SiteController::class, 'index']);
+$app->router->post('/', [SiteController::class, 'addAnAppointment']);
 
 $app->run();

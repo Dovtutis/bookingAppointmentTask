@@ -56,8 +56,30 @@
 #date-container {
     display: flex;
     flex-direction: column;
+    margin-top: 5px;
 }
 
 #hour-selector {
     margin-top: 20px;
+}
+
+.submit-button {
+    margin: 20px auto;
+    padding: 15px;
+    width: 250px;
+    border: none;
+    outline: none;
+    border-radius: 15px;
+    cursor: pointer;
+    background-color: #AE90EA;
+    color: #fff;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 4px 6px rgba(0,0,0, 0.8);
+    transition: .6s;
+}
+
+.submit-button:hover {
+    background-color: #8a71bb;
 }
