@@ -27,16 +27,17 @@
                         <div class="form-group" id="hour-selector">
                             <label for="time">Select available time:</label>
                             <select name="time" id="time">
-                                <option value="8">08:00</option>
-                                <option value="9">09:00</option>
+                                <option value="08">08:00</option>
+                                <option value="09">09:00</option>
                                 <option value="10">10:00</option>
-                                <option value="11">12:00</option>
-                                <option value="11">13:00</option>
-                                <option value="11">14:00</option>
-                                <option value="11">15:00</option>
-                                <option value="11">16:00</option>
-                                <option value="11">17:00</option>
-                                <option value="11">18:00</option>
+                                <option value="11">11:00</option>
+                                <option value="12">12:00</option>
+                                <option value="13">13:00</option>
+                                <option value="14">14:00</option>
+                                <option value="15">15:00</option>
+                                <option value="16">16:00</option>
+                                <option value="17">17:00</option>
+                                <option value="18">18:00</option>
                             </select> 
                             <span class="invalid-feedback"></span>
                         </div>
