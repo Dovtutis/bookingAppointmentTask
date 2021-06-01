@@ -86,6 +86,15 @@
     background-color: #8a71bb;
 }
 
+.response-message {
+    font-size: 18px;
+    font-weight: 600;
+    display: block;
+    margin: 5px;
+    color: #4cd137;
+    text-align: center;
+}
+
 #calendar-container {
     margin-top: 20px;
 }

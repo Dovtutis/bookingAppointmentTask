@@ -55,8 +55,8 @@ class Validation
 
     public function validateTime($data)
     {
-        $this->db->query("SELECT * FROM appointments WHERE day = :day && time = :time");
-        $this->db->bind(':day', $data['day']);
+        $this->db->query("SELECT * FROM appointments WHERE date = :date && time = :time");
+        $this->db->bind(':date', $data['date']);
         $this->db->bind(':time', $data['time']);
 
         $row = $this->db->singleRow();

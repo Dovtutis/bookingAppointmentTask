@@ -2,9 +2,7 @@
 require_once '../vendor/autoload.php';
 
 use app\controller\SiteController;
-use app\core\AuthController;
 use app\core\Application;
-use app\controller\FeedbackController;
 
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
@@ -21,5 +19,7 @@ $app = new Application(dirname(__DIR__), $config);
 
 $app->router->get('/', [SiteController::class, 'index']);
 $app->router->post('/', [SiteController::class, 'addAnAppointment']);
+$app->router->get('/getAppointments', [SiteController::class, 'getAppointments']);
+// $app->router->post('/getAppointments', [SiteController::class, 'getAppointments']);
 
 $app->run();

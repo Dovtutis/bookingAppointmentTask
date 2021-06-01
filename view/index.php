@@ -20,8 +20,8 @@
                     </div>
                     <div id="date-container">
                         <div class="form-group">
-                            <label for="day">Select available day:</label>
-                            <input type="date" id="day" name="day"> 
+                            <label for="date">Select available date:</label>
+                            <input type="date" id="date" name="date"> 
                             <span class="invalid-feedback"></span>
                         </div>
                         <div class="form-group" id="hour-selector">
@@ -45,6 +45,7 @@
                         </button>
                     </div>
                 </div>
+                <div class="response-message"></div>
             </form>
         </div>
         <div id="calendar-container">
@@ -84,9 +85,13 @@
     const appointmentFormEl = document.getElementById('appointment-form');
     const nameInputEl = document.getElementById('name');
     const lastnameInputEl = document.getElementById('lastname');
-    const dayInputEl = document.getElementById('day');
+    const dateInputEl = document.getElementById('date');
     const timeInputEl = document.getElementById('time');
+    const responseMessageEl = document.querySelector('.response-message');
     const date = new Date();
+    let month = new Date().getMonth() + 1;
+    let appointments = [];
+    getAppointments();
 
     const renderCalendar = () => {
         date.setDate(1);
@@ -120,11 +125,22 @@
             days += `<div class="prev-date">${prevLastDay - x + 1}</div>`   
         }
 
+        console.log(new Date().getMonth() + 1);
+
         for (let i = 1; i <= lastDay; i++) {
-            if (i === new Date().getDate() && date.getMonth() === new Date().getMonth()) {
-                days += `<div class="today">${i}</div>`;
-            }else {
-                days += `<div>${i}</div>`;
+
+            if (appointments.length !== 0) {
+                let trigger = false;
+                appointments.forEach(appointment => {
+                    if (appointment.month == month && i == appointment.day) {
+                        days += `<div class="today">${i}</div>`;
+                        trigger = true;
+                    } 
+                });
+                
+                if (!trigger) {
+                    days += `<div>${i}</div>`;
+                }
             }
         }
 
@@ -137,15 +153,15 @@
 
     document.querySelector('.prev').addEventListener('click', () => {
         date.setMonth(date.getMonth() - 1);
+        month--;
         renderCalendar();
     });
 
     document.querySelector('.next').addEventListener('click', () => {
         date.setMonth(date.getMonth() + 1);
+        month++;
         renderCalendar();
     });
-
-    renderCalendar();
 
     appointmentFormEl.addEventListener('submit', addAnAppointment);
 
@@ -164,6 +180,9 @@
                 if (data.errors){
                     handleErrors(data.errors);
                 }
+                if (data.response === 'success') {
+                    handleSuccess();
+                }
             }).catch(error => console.error())
     }
 
@@ -179,9 +198,9 @@
             lastnameInputEl.nextElementSibling.innerHTML = errors['lastnameError'];
         }
 
-        if (errors['dayError'] !== "") {
-            dayInputEl.classList.add('is-invalid');
-            dayInputEl.nextElementSibling.innerHTML = errors['dayError'];
+        if (errors['dateError'] !== "") {
+            dateInputEl.classList.add('is-invalid');
+            dateInputEl.nextElementSibling.innerHTML = errors['dateError'];
         }
 
         if (errors['timeError'] !== "") {
@@ -190,10 +209,28 @@
         }
     }
 
+    function handleSuccess() {
+        responseMessageEl.innerHTML = "Appointment booked successfully";
+
+        setTimeout(() => {
+            responseMessageEl.innerHTML = "";
+        }, 3000);
+    }
+
     function resetErrors(){
         const errorEl = appointmentFormEl.querySelectorAll('.is-invalid');
         errorEl.forEach((element) => {
             element.classList.remove('is-invalid');
         });
     }
+
+    function getAppointments() {
+        fetch('/getAppointments')
+            .then(resp => resp.json())
+            .then(data => {
+                appointments = data.appointments;
+                renderCalendar();
+            }).catch(error => console.error())
+    }
+    
 </script>

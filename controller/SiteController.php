@@ -24,11 +24,14 @@ class SiteController extends Controller
      */
     public function index()
     {
-        $params = [
+        $data = [
             'name' => "Doctor Appointment Booking",
             'currentPage' => "home"
         ];
-        return $this->render('index', $params);
+
+        // $data['appointments'] = $this->appointmentModel->getAppointments();
+
+        return $this->render('index', $data);
     }
 
     /**
@@ -41,17 +44,19 @@ class SiteController extends Controller
 
         $data['errors']['nameError'] = $this->validation->validateEmpty($data['name'], 'Name can\'t be empty');
         $data['errors']['lastnameError'] = $this->validation->validateEmpty($data['lastname'], 'Lastname can\'t be empty');
-        $data['errors']['dayError'] = $this->validation->validateEmpty($data['day'], 'Day must be selected');
+        $data['errors']['dateError'] = $this->validation->validateEmpty($data['date'], 'Date must be selected');
         $data['errors']['timeError'] = "";
 
-        if ($data['day'] !== "") {
-            $data['weekOfTheYear'] = date("W", strtotime($data['day']));
+        if ($data['date'] !== "") {
+            $data['weekOfTheYear'] = date("W", strtotime($data['date']));
+            $data['monthOfTheYear'] = date("m", strtotime($data['date']));
+            $data['dayOfTheMonth'] = date("d", strtotime($data['date']));
             $existingRegistration = $this->validation->userRegistrationExists($data);
 
             if ($existingRegistration !== false) {
                 foreach ($existingRegistration as $registration) {                    
                     if ($data['weekOfTheYear'] === $registration->week) {
-                        $data['errors']['dayError'] = "You already booked this week.";
+                        $data['errors']['dateError'] = "You already booked this week.";
                     }
                 }
             } else {
@@ -63,9 +68,9 @@ class SiteController extends Controller
 
         if ($this->validation->ifEmptyArray($data['errors'])) {
             if ($this->appointmentModel->addAppointment($data)) {
-                $response = 'appointmentAdded';
+                $data['response'] = 'success';
                 header('Content-Type: application/json');
-                echo json_encode($response);
+                echo json_encode($data);
             } else {
                 die('Something went wrong in adding user to DB');
             }
@@ -76,6 +81,14 @@ class SiteController extends Controller
 
             // header('Content-Type: application/json');
             // echo json_encode($data);
+    }
+
+    public function getAppointments (Request $request)
+    {
+        $data['appointments'] = $this->appointmentModel->getAppointments();
+
+        header('Content-Type: application/json');
+        echo json_encode($data);
     }
 
     public function notFound()
