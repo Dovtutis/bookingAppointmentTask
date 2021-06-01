@@ -2,7 +2,7 @@
 
 1. run command `composer install`
 1. create mysql database
-1. Create table 'users' in database
+1. Create table 'appointments' in database
 
 CREATE TABLE `appointments` (
  `id` int(11) NOT NULL AUTO_INCREMENT,
