@@ -42,7 +42,7 @@ class SiteController extends Controller
         $data['errors']['nameError'] = $this->validation->validateEmpty($data['name'], 'Name can\'t be empty');
         $data['errors']['lastnameError'] = $this->validation->validateEmpty($data['lastname'], 'Lastname can\'t be empty');
         $data['errors']['dayError'] = $this->validation->validateEmpty($data['day'], 'Day must be selected');
-        $data['errors']['timeError'] = $this->validation->validateTime($data);
+        $data['errors']['timeError'] = "";
 
         if ($data['day'] !== "") {
             $data['weekOfTheYear'] = date("W", strtotime($data['day']));
@@ -53,6 +53,10 @@ class SiteController extends Controller
                     if ($data['weekOfTheYear'] === $registration->week) {
                         $data['errors']['dayError'] = "You already booked this week.";
                     }
+                }
+            } else {
+                if ($this->validation->validateTime($data)) {
+                    $data['errors']['timeError'] = "This time is already booked, please select different time.";
                 }
             }
         }

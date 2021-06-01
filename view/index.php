@@ -30,8 +30,15 @@
                                 <option value="8">08:00</option>
                                 <option value="9">09:00</option>
                                 <option value="10">10:00</option>
-                                <option value="11">11:00</option>
+                                <option value="11">12:00</option>
+                                <option value="11">13:00</option>
+                                <option value="11">14:00</option>
+                                <option value="11">15:00</option>
+                                <option value="11">16:00</option>
+                                <option value="11">17:00</option>
+                                <option value="11">18:00</option>
                             </select> 
+                            <span class="invalid-feedback"></span>
                         </div>
                         <button type="submit" class="submit-button">
                             Book an appointment
@@ -54,6 +61,7 @@
     const nameInputEl = document.getElementById('name');
     const lastnameInputEl = document.getElementById('lastname');
     const dayInputEl = document.getElementById('day');
+    const timeInputEl = document.getElementById('time');
 
     appointmentFormEl.addEventListener('submit', addAnAppointment);
 
@@ -90,6 +98,11 @@
         if (errors['dayError'] !== "") {
             dayInputEl.classList.add('is-invalid');
             dayInputEl.nextElementSibling.innerHTML = errors['dayError'];
+        }
+
+        if (errors['timeError'] !== "") {
+            timeInputEl.classList.add('is-invalid');
+            timeInputEl.nextElementSibling.innerHTML = errors['timeError'];
         }
     }
 
