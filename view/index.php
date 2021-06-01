@@ -90,13 +90,7 @@
     const responseMessageEl = document.querySelector('.response-message');
     const date = new Date();
     let month = new Date().getMonth() + 1;
-    let appointments = [];
-    getAppointments();
-
-    const renderCalendar = () => {
-        date.setDate(1);
-        const firstDayIndex = date.getDay();
-        const months = [
+    const months = [
             "January",
             "February",
             "March",
@@ -110,6 +104,13 @@
             "November",
             "December",
         ];
+    let appointments = [];
+    const hours = ['08', '09', '10', '11', '12', '13', '14', '15', '16', '17', '18'];
+    getAppointments();
+
+    const renderCalendar = () => {
+        date.setDate(1);
+        const firstDayIndex = date.getDay();
         const monthDays = document.querySelector('.days');
         const lastDay = new Date(date.getFullYear(), date.getMonth() +1, 0).getDate();
         const prevLastDay = new Date(date.getFullYear(), date.getMonth(), 0).getDate();
@@ -119,36 +120,47 @@
         document.querySelector('.date h1').innerHTML = months[date.getMonth()];
         document.querySelector('.date p').innerHTML = new Date().toDateString();
 
-        let days = "";
+        monthDays.innerHTML = "";
 
         for (let x = firstDayIndex; x > 0; x--) {
-            days += `<div class="prev-date">${prevLastDay - x + 1}</div>`   
+            monthDays.innerHTML += `<div class="prev-date date-container">${prevLastDay - x + 1}</div>`   
         }
-
-        console.log(new Date().getMonth() + 1);
 
         for (let i = 1; i <= lastDay; i++) {
 
-            if (appointments.length !== 0) {
+            if (appointments.length) {
                 let trigger = false;
                 appointments.forEach(appointment => {
                     if (appointment.month == month && i == appointment.day) {
-                        days += `<div class="today">${i}</div>`;
-                        trigger = true;
+                        if (trigger) {
+                            let modal = document.getElementById("modal" + i);
+                            modal.innerHTML += `
+                               <p>${appointment.time}:00 is booked</p> 
+                            `;
+                        }else {
+                            monthDays.innerHTML += `
+                            <div class="booked date-container">${i}
+                                <div class="booked-modal" id=${"modal" + i}>
+                                    <p>${appointment.time}:00 is booked</p>
+                                </div>
+                            </div>`;
+                            trigger = true;
+                        }
                     } 
                 });
                 
                 if (!trigger) {
-                    days += `<div>${i}</div>`;
+                    monthDays.innerHTML += `<div class="date-container">${i}</div>`;
                 }
+            }else {
+                monthDays.innerHTML += `<div class="date-container">${i}</div>`;
             }
         }
 
         for (let j = 1; j <= nextDays; j++) {
-            days += `<div class="next-date">${j}</div>`
+            monthDays.innerHTML += `<div class="next-date date-container">${j}</div>`
         }
 
-        monthDays.innerHTML = days;
     }
 
     document.querySelector('.prev').addEventListener('click', () => {
@@ -176,7 +188,6 @@
             body: formData
         }).then(resp => resp.json())
             .then(data => {
-                console.log(data)
                 if (data.errors){
                     handleErrors(data.errors);
                 }
@@ -211,6 +222,7 @@
 
     function handleSuccess() {
         responseMessageEl.innerHTML = "Appointment booked successfully";
+        getAppointments();
 
         setTimeout(() => {
             responseMessageEl.innerHTML = "";

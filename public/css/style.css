@@ -5,7 +5,7 @@
 #main-container {
     min-height: 100vh;
     width: 100%;
-    padding: 50px;
+    padding: 40px;
     background-color: #AE90EA;
     display: flex;
     flex-direction: column;
@@ -105,6 +105,8 @@
     box-shadow: 0 4px 6px rgba(0,0,0, 0.4);
     border-radius: 20px;
     font-size: 16px;
+    position: relative;
+    z-index: 0;
 }
 
 .month {
@@ -161,7 +163,7 @@
     padding: .2rem;
 }
 
-.days div {
+.days .date-container {
     font-size: 22px;
     height: 40px;
     margin: .3rem;
@@ -172,17 +174,57 @@
     transition: background-color .2s;
 }
 
-.days div:hover:not(.today) {
-    background-color: #AE90EA;
-    border: .2 rem solid #8a71bb;
-    cursor: pointer;
-}
-
 .prev-date,
 .next-date {
     opacity: 0.5;
 }
 
-.today {
+.booked {
     background-color: #AE90EA;
+    cursor: pointer;
+    transition: .4s;
+    position: relative;
+    z-index: 0;
+}
+
+.booked-modal {
+    opacity: 0;
+    display: none;
+    position: absolute;
+    bottom: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    border-radius: 15px;
+    background-color: #e0d8f0;
+    z-index: 1;
+}
+
+.booked:hover {
+    background-color: #8a71bb;
+}
+
+.booked:hover .booked-modal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    animation: modal .5s;
+    opacity: 1;
+}
+
+.booked-modal p {
+    margin: 5px 0;
+    color: red;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@keyframes modal{
+    0%{
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }

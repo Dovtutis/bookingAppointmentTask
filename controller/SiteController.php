@@ -78,9 +78,6 @@ class SiteController extends Controller
             header('Content-Type: application/json');
             echo json_encode($data);
         }
-
-            // header('Content-Type: application/json');
-            // echo json_encode($data);
     }
 
     public function getAppointments (Request $request)
